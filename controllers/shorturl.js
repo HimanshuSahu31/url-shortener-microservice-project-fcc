@@ -2,6 +2,7 @@ const dns = require('dns');
 const Counter = require('../models/counter');
 const Shorturl = require('../models/shorturl');
 
+// Controller for creating new Short URL
 exports.shorturl_newurl = (req, res) => {
   if(req.body.url.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi)) {
     dns.lookup(req.body.url.substring(req.body.url.indexOf('://')+3), (err, addresses, family) => {
@@ -41,6 +42,7 @@ exports.shorturl_newurl = (req, res) => {
   }
 };
 
+// Controller for redirecting to Original URL
 exports.shorturl_redirect = (req, res) => {
   Shorturl.findOne({ shortUrl: req.params.shortUrl })
   .exec()
@@ -48,6 +50,6 @@ exports.shorturl_redirect = (req, res) => {
     res.redirect(doc.originalUrl);
   })
   .catch(err => {
-    res.json({"error":"No short url found for given input1"});
+    res.json({"error":"No short url found for given input"});
   });
 };
